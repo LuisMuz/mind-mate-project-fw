@@ -8,7 +8,7 @@ export default function UsersTable({
     users: FormattedUsersTable[];
 }) {
   return (
-    <div className="w-full">
+    <div className="w-full">  
       <div className="mt-6 flow-root">
         <div className="overflow-x-auto">
           <div className="inline-block min-w-full align-middle">
