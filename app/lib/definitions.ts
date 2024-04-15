@@ -50,6 +50,16 @@ export type PsychologistProfile = {
     areas_of_expertise?: string[];
 }
 
+export type PsychologistProfileView = {
+    name? : string;
+    description?: string;
+    specialty?: string;
+    experience?: number;
+    education?: string;
+    certifications?: string[];
+    areas_of_expertise?: string[];
+}
+
 export type FormattedUsersTable = {
     id: string;
     name: string;

@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@fullcalendar/daygrid": "^6.1.11",
+    "@fullcalendar/react": "^6.1.11",
     "@heroicons/react": "^2.0.18",
     "chart.js": "^4.4.2",
     "clsx": "^2.1.0",

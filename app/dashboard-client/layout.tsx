@@ -9,7 +9,9 @@ export default function Layout({
             <div className = "w-full flex-none md:w-64">
                 <SideNav userType='client'/>
             </div>
-            {children}
+            <div className = "w-full p-8">
+                {children}
+            </div>
         </div>
     );
 }
