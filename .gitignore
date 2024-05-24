@@ -8,7 +8,6 @@ node_modules/
 
 # testing
 /coverage
-
 db.js
 
 # next.js
@@ -30,6 +29,7 @@ yarn-error.log*
 # local env files
 .env*.local
 .env
+credentials.env
 
 # vercel
 .vercel
