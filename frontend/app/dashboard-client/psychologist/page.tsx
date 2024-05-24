@@ -1,9 +1,10 @@
-'use client'
 
 import { PsychologistProfileView } from '@/app/lib/definitions';
 import ProfilePage from '@/app/ui/dashboard/psychologist/profile';
+import { useRouter } from 'next/router';
 
 export default function Page(){
+    
     const dummy_profile: PsychologistProfileView = {
         name: "Jarvis Stark",
         description: "I am a psychologist with over 10 years of experience. I specialize in cognitive behavioral therapy.",

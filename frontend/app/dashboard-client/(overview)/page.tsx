@@ -1,94 +1,55 @@
 'use client'
-
 import { DailyNote } from '@/app/lib/definitions';
 import NoteCardSimple from '@/app/ui/dashboard/user/note-card';
 import { useRouter } from 'next/navigation';
-
+import { useAppContext } from '@/app/lib/UserContext';
+import { useEffect, useState } from 'react';
 
 const Home: React.FC = () => {
     const router = useRouter();
+    const { userId } = useAppContext();
+    const [notes, setNotes] = useState<DailyNote[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
-    // Temporary list of daily notes
-    const dummyNotes: DailyNote[] = [
-        {
-            id: '1',
-            client_id: 'client1',
-            title: 'First Note',
-            content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi.',
-            date: new Date(),
-            viewed: true,
-            notes_psycho: '',
-        },
-        {
-            id: '2',
-            client_id: 'client2',
-            title: 'Second Note',
-            content: 'Pellentesque commodo eros a enim. Duis lobortis massa imperdiet quam. Phasellus blandit leo ut odio. Maecenas ullamcorper.',
-            date: new Date(),
-            viewed: false,
-            notes_psycho: '',
-        },
-        {
-            id: '13',
-            client_id: '', // No client for diary entries
-            title: 'Saturday, April 13th',
-            content: 'Woke up feeling refreshed after a good nights sleep. Enjoyed a cup of coffee on the balcony and watched the sunrise. Feeling motivated to tackle some personal projects today.',
-            date: new Date(),
-            viewed: true,
-            notes_psycho: '',
-        },
-        {
-            id: '14',
-            client_id: '', // No client for diary entries
-            title: 'Friday, April 12th',
-            content: 'Had dinner with friends and laughed until our sides hurt. It was a much-needed break from the week and a great way to recharge.',
-            date: new Date(),
-            viewed: false,
-            notes_psycho: '',
-        },
-        {
-            id: '15',
-            client_id: '', // No client for diary entries
-            title: 'Thursday, April 11th',
-            content: 'Struggled to stay focused at work today. Took a short walk outside to clear my head and came back feeling more productive.',
-            date: new Date(),
-            viewed: true,
-            notes_psycho: '',
-        },
-        {
-            id: '16',
-            client_id: '', // No client for diary entries
-            title: 'Wednesday, April 10th',
-            content: 'Started reading a new book that Ive been excited about. Already hooked on the story and cant wait to see where it goes.',
-            date: new Date(),
-            viewed: false,
-            notes_psycho: '',
-        },
-        {
-            id: '17',
-            client_id: '', // No client for diary entries
-            title: 'Tuesday, April 9th',
-            content: 'Feeling grateful for a beautiful spring day. Went for a run in the park and enjoyed the fresh air and sunshine.',
-            date: new Date(),
-            viewed: true,
-            notes_psycho: '',
-        },
-        {
-            id: '17',
-            client_id: '', // No client for diary entries
-            title: 'Tuesday, April 9th',
-            content: 'Feeling grateful for a beautiful spring day. Went for a run in the park and enjoyed the fresh air and sunshine.',
-            date: new Date(),
-            viewed: true,
-            notes_psycho: '',
-        },
-        
-    ];
+    useEffect(() => {
+        const fetchNotes = async () => {
+            try {
+                const response = await fetch(`http://localhost:3030/notes/${userId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to fetch notes');
+                }
+
+                const data = await response.json();
+                setNotes(data);
+                setLoading(false);
+            } catch (error) {
+                setError("An error occurred while fetching the notes");
+                setLoading(false);
+            }
+        };
+
+        fetchNotes();
+    }, [userId]);
 
     const handleNewNoteClick = () => {
         //router.push('/new-note');
         console.log("New note");
     };
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>{error}</div>;
+    }
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -103,10 +64,16 @@ const Home: React.FC = () => {
                     New +
                 </button>
             </div>
-            <div className="w-full h-[600px] overflow-auto">
-                {dummyNotes.map(note => (
-                    <NoteCardSimple note={note}/>
-                ))}
+            <div className="w-full overflow-auto">
+                {notes.length === 0 ? (
+                    <div className="flex justify-center items-center h-64">
+                        <p className="text-xl text-gray-600">You don't have any notes yet</p>
+                    </div>
+                ) : (
+                    notes.map((note) => (
+                        <NoteCardSimple key={note.id} note={note} />
+                    ))
+                )}
             </div>
         </div>
     );

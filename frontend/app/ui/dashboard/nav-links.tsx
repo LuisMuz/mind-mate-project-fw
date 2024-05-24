@@ -11,64 +11,47 @@ import {
 } from '@heroicons/react/24/outline';
 
 import Link from 'next/link'
-import {usePathname} from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import clsx from 'clsx'
 import { Key, ReactElement, JSXElementConstructor, ReactNode, AwaitedReactNode } from 'react';
 import { UrlObject } from 'url';
 
 interface NavLinksProps {
   userType: string;
+  userId: string;
 }
 
 interface Link {
   name: string;
   href: string;
   icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref"> & {
-      title?: string | undefined;
-      titleId?: string | undefined;
-    } & React.RefAttributes<SVGSVGElement>>;
+    title?: string | undefined;
+    titleId?: string | undefined;
+  } & React.RefAttributes<SVGSVGElement>>;
 }
 
-export default function NavLinks({ userType }: NavLinksProps) {
+export default function NavLinks({ userType, userId }: NavLinksProps) {
   const pathname = usePathname();
 
   let links: Link[] = [];
 
   if (userType === 'admin') {
-    links.push({ 
-      name: 'Home', 
-      href: '/dashboard-admin', 
-      icon: HomeIcon 
-    });
-    links.push({ 
-      name: 'Users', 
-      href: '/dashboard-admin/users', 
-      icon: UserGroupIcon 
-    });
-  } else if(userType === 'psychologist') {
-    links.push({ name: 'Home', href: '/dashboard-psychologist', icon: HomeIcon },);
-    links.push({ 
-      name: 'Recient Activity',
-      href: '/dashboard-psychologist/activity', 
-      icon: ClockIcon,
-    },);
-    links.push(  {
-      name: 'Profile',
-      href: '/dashboard-psychologist/profile',
-      icon: UserIcon,
-    },);
+    links = [
+      { name: 'Home', href: '/dashboard-admin', icon: HomeIcon },
+      { name: 'Users', href: '/dashboard-admin/users', icon: UserGroupIcon },
+    ];
+  } else if (userType === 'psychologist') {
+    links = [
+      { name: 'Home', href: `/dashboard-psychologist`, icon: HomeIcon },
+      { name: 'Recient Activity', href: `/dashboard-psychologist/activity`, icon: ClockIcon },
+      { name: 'Profile', href: `/dashboard-psychologist/profile`, icon: IdentificationIcon },
+    ];
   } else {
-    links.push({ name: 'Home', href: '/dashboard-client', icon: HomeIcon },);
-    links.push({
-      name: 'Calendary',
-      href: '/dashboard-client/calendar',
-      icon: CalendarDaysIcon,
-    },);
-    links.push({ 
-      name: 'Psychologist',
-      href: '/dashboard-client/psychologist', 
-      icon: IdentificationIcon, 
-    },);
+    links = [
+      { name: 'Home', href: `/dashboard-client`, icon: HomeIcon },
+      { name: 'Calendary', href: `/dashboard-client/calendar`, icon: CalendarDaysIcon },
+      { name: 'Psychologist', href: `/dashboard-client/psychologist`, icon: IdentificationIcon },
+    ];
   }
 
   return (
@@ -83,7 +66,7 @@ export default function NavLinks({ userType }: NavLinksProps) {
             className={clsx("flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3",
               {
                 'bg-sky-100 text-blue-600': pathname === link.href,
-              },  
+              },
             )}
           >
             <LinkIcon className="w-6" />

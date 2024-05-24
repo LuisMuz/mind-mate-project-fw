@@ -14,12 +14,20 @@ export type User = {
     role: Role;
 };
 
+export type SessionRequest={
+    id: string;
+    psycho_requested_id: string;
+    client_id: string;
+    time: Date;
+    accepted: boolean;
+};
+
 export type Session = {
     id: string;
     psycho_id: string;
     client_id: string | null;
-    token: string;
-    used: boolean;
+    time: Date;   
+    active: boolean; 
 };
 
 export type Appointment = {
@@ -40,17 +48,17 @@ export type DailyNote = {
 }
 
 export type PsychologistProfile = {
-    id: string;
     psychologist_id: string;
-    description?: string;
-    specialty?: string;
-    experience?: number;
-    education?: string;
-    certifications?: string[];
-    areas_of_expertise?: string[];
+    description: string;
+    specialty: string;
+    experience: number;
+    education: string;
+    certifications: string[];
+    areas_of_expertise: string[];
 }
 
 export type PsychologistProfileView = {
+    psychologist_id: string;
     name? : string;
     description?: string;
     specialty?: string;

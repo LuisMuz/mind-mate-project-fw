@@ -65,9 +65,7 @@ export default function Page(){
             <h1 className="mb-4 text-2xl md:text-4xl font-bold text-gray-800 pb-2">
                 Recient Activity
             </h1>
-            <div>
-                <NoteCard notes={dummyNotes} />
-            </div>
+            <NoteCard notes={dummyNotes} />
         </div>
     );
 }

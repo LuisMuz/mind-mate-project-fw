@@ -41,8 +41,6 @@ export default function Page() {
         },
       ];
       
-
-      
     return (
         <main>
             <h1 className="mb-4 text-2xl md:text-4xl font-bold text-gray-800 pb-2">
