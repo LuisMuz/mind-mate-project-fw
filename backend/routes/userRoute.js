@@ -111,5 +111,24 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
+// Route to get count of psychologists
+router.get('/psychologists/count', async (req, res) => {
+    try {
+        const count = await User.countDocuments({ role: 'PSYCHOLOGIST' });
+        res.send({ count });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
+// Route to get count of clients
+router.get('/clients/count', async (req, res) => {
+    try {
+        const count = await User.countDocuments({ role: 'CLIENT' });
+        res.send({ count });
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
 
 export default router;

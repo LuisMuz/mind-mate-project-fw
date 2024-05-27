@@ -14,13 +14,18 @@ export type User = {
     role: Role;
 };
 
-export type SessionRequest={
-    id: string;
-    psycho_requested_id: string;
-    client_id: string;
+export type SessionToken = {
+    id: string; 
+    psycho_id: string;
+    token: string;
     time: Date;
-    accepted: boolean;
+    used: boolean;
 };
+
+export type SessionTokenValidate = {
+    client_id: string;
+    token: string;
+}
 
 export type Session = {
     id: string;
@@ -38,7 +43,7 @@ export type Appointment = {
 }
 
 export type DailyNote = {
-    id: string;
+    _id: string;
     client_id: string;
     title: string;
     content: string;

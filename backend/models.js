@@ -49,4 +49,13 @@ const sessionSchema = new mongoose.Schema({
 
 const Session = mongoose.model('Session', sessionSchema)
 
-export { User, DailyNote, Appointment, PsychologistProfile, Session };
+const sessionTokenSchema = new mongoose.Schema({
+    psycho_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+    token: { type: String, required: true, unique: true },
+    createdAt: { type: Date, default: Date.now },
+    used: { type: Boolean, default: false }
+});
+
+const SessionToken = mongoose.model('SessionToken', sessionTokenSchema);
+
+export { User, DailyNote, Appointment, PsychologistProfile, Session, SessionToken };

@@ -6,6 +6,7 @@ import PsychologistProfile from "./routes/psychologistProfileRoute.js";
 import appointmentRoute from "./routes/appointmentRoute.js";
 import notesRoute from "./routes/notesRoute.js";
 import sessionRoute from "./routes/sessionRoute.js";
+import sessionToken from "./routes/sessionTokenRoute.js";
 import loginUser from "./routes/login.js";
 import cors from "cors";
 
@@ -18,7 +19,8 @@ app.use("/users", userRoute);
 app.use("/psychologistProfile", PsychologistProfile);
 app.use("/appointments", appointmentRoute);
 app.use("/notes", notesRoute);
-app.use("/sessions", sessionRoute);
+app.use("/session", sessionRoute);
+app.use("/sessionToken", sessionToken);
 
 mongoose 
     .connect(mongoURI)
@@ -40,5 +42,5 @@ app.get("/", (req, res) => {
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).send('Something went wrong!');
-  });
+});
   

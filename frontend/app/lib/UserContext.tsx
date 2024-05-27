@@ -8,9 +8,14 @@ export function AppWrapper({children}: {
 }){
   const [userId, setUserId] = useState(""); 
   const [userRole, setUserRole] = useState(""); 
+  const [clientQuery, setClientQuery] = useState("");
 
   return(
-    <AppContext.Provider value={{userId, setUserId, userRole, setUserRole}}>
+    <AppContext.Provider value={{
+      userId, setUserId, 
+      userRole, setUserRole, 
+      clientQuery, setClientQuery
+      }}>
       {children}
     </AppContext.Provider>
   );

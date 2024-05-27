@@ -4,6 +4,7 @@ import NoteCardSimple from '@/app/ui/dashboard/user/note-card';
 import { useRouter } from 'next/navigation';
 import { useAppContext } from '@/app/lib/UserContext';
 import { useEffect, useState } from 'react';
+import Modal from '@/app/ui/dashboard/user/create-note';
 
 const Home: React.FC = () => {
     const router = useRouter();
@@ -11,6 +12,7 @@ const Home: React.FC = () => {
     const [notes, setNotes] = useState<DailyNote[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         const fetchNotes = async () => {
@@ -39,8 +41,42 @@ const Home: React.FC = () => {
     }, [userId]);
 
     const handleNewNoteClick = () => {
-        //router.push('/new-note');
-        console.log("New note");
+        setShowModal(true);
+    };
+
+    const handleSaveNote = async (title: string, content: string) => {
+        try {
+            const newNote: Partial<DailyNote> = {
+                client_id: userId,
+                title,
+                content,
+                date: new Date(),
+                viewed: false,
+                notes_psycho: '',
+            };
+
+            const response = await fetch('http://localhost:3030/notes', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(newNote),
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to save note');
+            }
+
+            const savedNote = await response.json();
+            setNotes([...notes, savedNote]);
+            setShowModal(false);
+        } catch (error) {
+            setError('An error occurred while saving the note');
+        }
+    };
+
+    const handleCancel = () => {
+        setShowModal(false);
     };
 
     if (loading) {
@@ -50,6 +86,9 @@ const Home: React.FC = () => {
     if (error) {
         return <div>{error}</div>;
     }
+
+    // Sort notes by date
+    const sortedNotes = notes.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -65,14 +104,24 @@ const Home: React.FC = () => {
                 </button>
             </div>
             <div className="w-full overflow-auto">
-                {notes.length === 0 ? (
+                {sortedNotes.length === 0 ? (
                     <div className="flex justify-center items-center h-64">
                         <p className="text-xl text-gray-600">You don't have any notes yet</p>
                     </div>
                 ) : (
-                    notes.map((note) => (
-                        <NoteCardSimple key={note.id} note={note} />
+                    sortedNotes.map((note) => (
+                        <NoteCardSimple key={note._id} note={note} />
                     ))
+                )}
+            </div>
+
+            {showModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-50"></div>
+            )}
+
+            <div>
+                {showModal && (
+                    <Modal onSave={handleSaveNote} onCancel={handleCancel} />
                 )}
             </div>
         </div>
